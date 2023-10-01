@@ -3,6 +3,12 @@ on:
   pull_request:
     branches:
       - main
+env:
+  # NOTE: Normally, best practice only exposes the required environment variables to each job individually.
+  # Placed here, the variables will be exposed to every job for simplicity.
+  DATABASE_URL: postgres://postgres:postgres@localhost:5432/quotes
+  VITE_API_URL: http://localhost:3000
+  API_SECRET: secretvalue
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
@@ -11,3 +17,11 @@ jobs:
       - uses: ./.github/actions/build
       - name: Run tests
         run: pnpm test:backend:unit
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/docker-compose
+      - name: Run tests
+        run: pnpm test:backend:int
