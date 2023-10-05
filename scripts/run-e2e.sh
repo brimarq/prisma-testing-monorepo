@@ -10,4 +10,5 @@ else
     npx playwright test --headed
 fi
 
-npx playwright show-report
+# Don't run this in CI
+# npx playwright show-report
